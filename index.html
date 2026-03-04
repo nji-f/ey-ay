@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web AI Gemini</title>
+    <style>
+        body { font-family: sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; background-color: #f4f4f9; }
+        .chat-box { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        input { width: 70%; padding: 10px; border-radius: 5px; border: 1px solid #ccc; }
+        button { padding: 10px 20px; background-color: #0070f3; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background-color: #005bb5; }
+        #response { margin-top: 20px; padding: 15px; background: #eef2f5; border-radius: 5px; white-space: pre-wrap; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <div class="chat-box">
+        <h2>🎴 Chat dengan Gemini AI</h2>
+        <input type="text" id="prompt" placeholder="Hai, apa kabar?">
+        <button onclick="askAI()" id="btn">Kirim</button>
+        <div id="response">Jawaban akan muncul di sini...</div>
+    </div>
+
+    <script>
+        async function askAI() {
+            const prompt = document.getElementById('prompt').value;
+            const responseDiv = document.getElementById('response');
+            const btn = document.getElementById('btn');
+
+            if(!prompt) return alert("Masukkan pertanyaan dulu!");
+
+            btn.innerText = "Mikir...";
+            responseDiv.innerText = "Sedang mengetik...";
+
+            try {
+                // Memanggil file api/chat.js yang ada di Vercel
+                const res = await fetch(`/api/chat?text=${encodeURIComponent(prompt)}`);
+                const data = await res.json();
+                responseDiv.innerText = data.reply;
+            } catch (error) {
+                responseDiv.innerText = "Terjadi kesalahan: " + error.message;
+            } finally {
+                btn.innerText = "Kirim";
+            }
+        }
+    </script>
+</body>
+</html>
